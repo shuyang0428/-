@@ -1,0 +1,42 @@
+# LC34 Find First and Last Position of Element in Sorted Array
+class Solution:
+    def getRight(self,nums,target):
+        left,right = 0,len(nums) - 1
+        right_most = -2
+        while left <= right:
+            mid = left + (right-left) // 2
+            if nums[mid] > target:
+                right = mid - 1
+            elif nums[mid] < target:
+                left = mid + 1
+            elif nums[mid] == target:
+                right_most = mid
+                left = mid + 1
+        return right_most
+    def getLeft(self,nums,target):
+        left,right = 0,len(nums) -1
+        left_most = -2
+        while left <= right:
+            mid = left + (right-left) // 2
+            if nums[mid] > target:
+                right = mid - 1
+            elif nums[mid] < target:
+                left = mid + 1
+            elif nums[mid] == target:
+                left_most = mid
+                right = mid - 1
+        return left_most
+
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        if not nums:
+            return [-1,-1]
+        if target < nums[0] or target > nums[-1]:
+            return [-1,-1]
+        l = self.getLeft(nums,target)
+        r = self.getRight(nums,target)
+        if l == -2 or r == -2:
+            return [-1,-1]
+        if r >= l:
+            return [l,r]
+        else:
+            return [-1,-1]
