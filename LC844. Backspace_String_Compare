@@ -1,0 +1,47 @@
+LC844 Backspace String Compare
+
+# Sol 1 Queue without queue dictionary
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        def newString(s:str)->list:
+          ans = []
+          if not s:
+            return []
+          for ch in s:
+            if ch == "#" and ans != []:
+              ans.pop()
+            elif ch != "#":
+              ans.append(ch)
+          return ans
+        return newString(s) == newString(t)
+
+# Sol 2 Two Pointers
+class Solution:
+  def backspaceCompare(self, s: str, t: str) -> bool:
+    s_index = len(s) - 1
+    t_index = len(t) - 1
+    s_backspace = 0
+    t_backspace = 0
+    while s_index >= 0 or t_index >= 0:
+      while s_index >= 0 and (s[s_index] == '#' or s_backspace > 0):
+        if s[s_index] == '#':
+          s_backspace += 1
+        else:
+          s_backspace -= 1
+        s_index -= 1
+      while t_index >= 0 and (t[t_index] == '#' or t_backspace > 0):
+        if t[t_index] == '#':
+          t_backspace += 1
+        else:
+          t_backspace -= 1
+        t_index -= 1
+      if (s_index == -1 or t_index == -1) and s_index != t_index:
+        return False
+      if s_index == t_index == -1:
+        return True
+      if s[s_index] != t[t_index]:
+        return False
+      s_index -= 1
+      t_index -= 1
+
+    return s_index == t_index
