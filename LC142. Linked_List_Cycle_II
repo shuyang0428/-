@@ -1,0 +1,30 @@
+# LC142 Linked List Cycle II
+
+# Sol 1 Two Pointers Time:O(n) Space:O(1)
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        fast,slow = head,head
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                idx1,idx2 = fast,head
+                while idx1 != idx2:
+                    idx1 = idx1.next
+                    idx2 = idx2.next
+                return idx2
+        return None
+
+# Sol 2 Using Set
+class Solution:
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        nodes_seen = set()
+        node = head
+
+        while node:
+            if node in nodes_seen:
+                return node
+            else:
+                nodes_seen.add(node)
+                node = node.next
+        return None
