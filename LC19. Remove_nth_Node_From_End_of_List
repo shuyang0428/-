@@ -1,0 +1,36 @@
+# LC19 Remove Nth Node From End of List
+
+# Sol 1 fast and slow pointers
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        slow,fast = head,head
+        for _ in range(n):
+            fast = fast.next
+        
+        if not fast:
+            return head.next
+        
+        while fast.next:
+            slow = slow.next
+            fast = fast.next
+        slow.next = slow.next.next
+        return head
+
+# Sol 2 Dummy head and two pointers
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummyhead = ListNode(None)
+        dummyhead.next = head
+
+        slow,fast = dummyhead,dummyhead
+
+        for i in range(n):
+            fast = fast.next
+        
+        fast = fast.next
+        while fast:
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+
+        return dummyhead.next
