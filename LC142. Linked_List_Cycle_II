@@ -15,7 +15,7 @@ class Solution:
                 return idx2
         return None
 
-# Sol 2 Using Set
+# Sol 2 Hash Table
 class Solution:
     def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
         nodes_seen = set()
