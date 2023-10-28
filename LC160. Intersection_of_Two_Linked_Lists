@@ -1,0 +1,55 @@
+# LC160 Intersection of Two Linked Lists
+
+# Sol 1 Hash table
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        nodeset = set()
+        while headA:
+            nodeset.add(headA)
+            headA = headA.next
+        while headB:
+            if headB in nodeset:
+                return headB
+            headB = headB.next
+        return None
+
+# Sol 2 Two Pointers Time:O(M+N) Space:O(1)
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        pA = headA
+        pB = headB
+
+        while pA != pB:
+            pA = headB if not pA else pA.next
+            pB = headA if not pB else pB.next
+        return pA
+
+# Sol 3
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        lenA,lenB = 0,0
+
+        curr = headA
+        while curr:
+            curr = curr.next
+            lenA += 1
+
+        curr = headB
+        while curr:
+            curr = curr.next
+            lenB += 1
+        
+        curA,curB = headA,headB
+        if lenA > lenB:
+            curA,curB = curB,curA
+            lenA,lenB = lenB,lenA
+
+        for i in range(lenB - lenA):
+            curB = curB.next
+        while curA:
+            if curA == curB:
+                return curB
+            else:
+                curA = curA.next
+                curB = curB.next
+        return None
