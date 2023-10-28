@@ -1,0 +1,59 @@
+# LC206 Reverse Linked List
+
+# Sol 1 Two Pointers
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next: 
+            return head
+        
+        curr = head
+        prev = None
+
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev,curr = curr,temp
+        return prev
+
+# Sol 2 Recursion
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        last = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+
+        return last
+
+# Sol 3 Dummy Head
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(-1)
+        dummy.next = None
+        curr = head
+        while curr:
+            temp = curr.next
+            curr.next = dummy.next
+            dummy.next = curr
+            curr = temp
+        return dummy.next
+
+# Sol 4 Stack
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        stack = []
+        curr = head
+        while curr:
+            stack.append(curr)
+            curr = curr.next
+        dummy = ListNode(-1)
+        curr = dummy
+        while stack:
+            node = stack.pop()
+            curr.next = node
+            curr = curr.next
+        curr.next = None
+        return dummy.next
