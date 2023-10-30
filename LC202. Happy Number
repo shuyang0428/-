@@ -1,0 +1,31 @@
+# LC202 Happy Number
+
+# Sol 1
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        def getSum(n):
+            totalsum = 0
+            while n:
+                totalsum += (n%10)**2
+                n //= 10
+            return totalsum
+        seen = set()
+        while n != 1 and n not in seen:
+            seen.add(n)
+            n = getSum(n)
+        return n==1
+
+# Sol 2
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        if n == 1 or n == 7:
+            return True
+        
+        while(len(str(n))) > 1:
+            curr_sum = sum(int(num)**2 for num in list(str(n)))
+            if curr_sum == 1 or curr_sum == 7:
+                return True
+            else: 
+                n = curr_sum
+
+        return False
