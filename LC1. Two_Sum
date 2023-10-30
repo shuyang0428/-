@@ -1,0 +1,28 @@
+# LC1 Two Sum
+
+# Sol 1 Hash Table
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        d = dict()
+        for i, num in enumerate(nums):
+            d[num] = i
+        print(d)
+        for i in range(len(nums)):
+            remain = target - nums[i]
+            if remain in d and i != d[remain]:
+                return [i,d[remain]]
+
+
+# Sol 2 Two Pointers
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        nums = enumerate(nums)
+        nums = sorted(nums,key = lambda x:x[1])
+        left,right = 0,len(nums) - 1
+        while left<right:
+            if nums[left][1] + nums[right][1] == target:
+                return[nums[left][0],nums[right][0]]
+            elif nums[left][1] + nums[right][1] > target:
+                right -= 1
+            else:
+                left += 1
