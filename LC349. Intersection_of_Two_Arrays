@@ -1,0 +1,25 @@
+# LC349 Intersection of Two Arrays
+
+# Sol 1 Time:O(M+N) Space:O(N)
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        d = collections.defaultdict(int)
+        for num in nums1:
+            d[num] += 1
+        ans = []
+        for num in nums2:
+            if num in d and num not in ans:
+                ans.append(num)
+        return ans
+
+# Sol 2 Time:O(MN) Space:O(M+N)
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        set1 = set(nums1)
+        set2 = set(nums2)
+
+        ans = []
+        for num in set1:
+            if num in set2:
+                ans.append(num)
+        return ans
