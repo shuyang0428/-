@@ -1,0 +1,77 @@
+# LC20 Valid Parentheses
+
+# Sol 1 Stack
+class Solution:
+    def isValid(self, s: str) -> bool:
+        
+        if len(s) % 2:
+            return False
+        
+        stack = []
+
+        for item in s:
+            if item == "(":
+                stack.append(")")
+            elif item == "[":
+                stack.append(']')
+            elif item == '{':
+                stack.append('}')
+            elif not stack or stack[-1] != item:
+                return False
+            else:
+                stack.pop()
+        return True if not stack else False
+
+# Sol 2 Stack
+class Solution:
+    def isValid(self, s: str) -> bool:
+        if len(s) % 2 != 0:
+            return False
+
+        stack = []
+        l = ['(','[','{']
+
+        for pran in s:
+            if pran in l:
+                stack.append(pran)
+            elif pran == ")":
+                if stack and stack.pop() == "(":
+                    continue
+                else:
+                    return False
+            elif pran == "]":
+                if stack and stack.pop() == "[":
+                    continue
+                else:
+                    return False
+            elif pran == "}":
+                if stack and stack.pop() == "{":
+                    continue
+                else:
+                    return False
+            
+        return True if not stack else False
+
+# Sol 3 Dictionary
+class Solution:
+    def isValid(self, s: str) -> bool:
+        
+        if len(s) % 2:
+            return False
+        
+        mapping = {
+            '(': ')',
+            '[': ']',
+            '{': '}'
+        }
+
+        stack = []
+
+        for paren in s:
+            if paren in mapping.keys():
+                stack.append(paren)
+            elif not stack or mapping[stack[-1]] != paren:
+                return False
+            else:
+                stack.pop()
+        return True if not stack else False
