@@ -1,0 +1,39 @@
+# LC150 Evaluate Reverse Polish Notation
+
+# Sol 1 operator map
+from operator import add, sub, mul
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        op_map = {'+':add, "-":sub, "*":mul, "/": lambda x,y:int(x/y)}
+
+        stack = []
+        for token in tokens:
+            if token not in op_map.keys():
+                stack.append(int(token))
+            else:
+                op2 = stack.pop()
+                op1 = stack.pop()
+                stack.append(op_map[token](op1,op2))
+        return stack.pop()
+
+# Sol 2 lambda function
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        operations = {
+        "+": lambda a, b: a + b,
+        "-": lambda a, b: a - b,
+        "/": lambda a, b: int(a / b),
+        "*": lambda a, b: a * b
+    }
+    
+        stack = []
+        for token in tokens:
+            if token in operations:
+                number_2 = stack.pop()
+                number_1 = stack.pop()
+                operation = operations[token]
+                stack.append(operation(number_1, number_2))
+            else:
+                stack.append(int(token))
+        return stack.pop()
+            
