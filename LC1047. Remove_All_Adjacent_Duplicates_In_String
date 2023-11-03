@@ -1,0 +1,29 @@
+# LC1047 Remove All Afjacent Duplicates In String
+
+# Sol 1 Stack
+class Solution:
+    def removeDuplicates(self, s: str) -> str:
+        stack = []
+        for ch in s:
+            if stack and stack[-1] == ch:
+                stack.pop()
+            else:
+                stack.append(ch)
+        return "".join(stack)
+
+# Sol 2 Two Pointers
+class Solution:
+    def removeDuplicates(self, s: str) -> str:
+        ans = list(s)
+        fast,slow = 0,0
+
+        while fast<len(s):
+            ans[slow] = ans[fast]
+
+            if slow > 0 and ans[slow] == ans[slow-1]:
+                slow -= 1
+            else:
+                slow += 1
+            fast += 1
+        return "".join(ans[:slow])
+
