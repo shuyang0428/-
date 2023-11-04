@@ -1,0 +1,47 @@
+# LC144 Binary Tree Preorder Tracersal
+
+# Sol 1 Recurision DFS function
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        def dfs(node):
+            if not node:
+                return
+            res.append(node.val)
+            dfs(node.left)
+            dfs(node.right)
+        dfs(root)
+        return res
+
+# Sol 2 Recurision DFS simplified
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+        return [root.val]+self.preorderTraversal(root.left)+self.preorderTraversal(root.right)
+
+# Sol 3 Recurision DFS simplified
+class Solution:
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+
+        left = self.preorderTraversal(root.left)
+        right = self.preorderTraversal(root.right)
+
+        return  [root.val] + left +  right
+
+# Sol 4 DFS Iteration
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        stack = [root]
+
+        while stack:
+            curr_node = stack.pop()
+            if curr_node:
+                res.append(curr_node.val)
+                stack.append(curr_node.right)
+                stack.append(curr_node.left)
+        
+        return res
