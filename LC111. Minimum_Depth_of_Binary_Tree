@@ -1,0 +1,72 @@
+# LC111 Minumum Depth of Binary Tree
+
+# Sol 1 DFS Recursion
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        if not root.left and not root.right:
+            return 1
+        
+        left = self.minDepth(root.left)
+        right = self.minDepth(root.right)
+        
+        if not root.left:
+            return right + 1
+        elif not root.right:
+            return left + 1
+        else: return min(left,right) + 1
+
+# Sol 2 BFS
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+
+        res = 0
+        que = collections.deque([root])
+
+        while que:
+            n = len(que)
+            res += 1
+            for _ in range(n):
+                node = que.popleft()
+                if not node.left and not node.right:
+                    return res
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+        return res
+
+# Sol 3 DFS Simplified
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if root is None:
+            return 0
+        if root.left is None and root.right is not None:
+            return 1 + self.minDepth(root.right)
+        if root.left is not None and root.right is None:
+            return 1 + self.minDepth(root.left)
+        return 1 + min(self.minDepth(root.left), self.minDepth(root.right))
+
+# Sol 4 Helper function DFS Preorder
+class Solution:
+    def __init__(self):
+        self.result = float('inf')
+
+    def getDepth(self, node, depth):
+        if node is None:
+            return
+        if node.left is None and node.right is None:
+            self.result = min(self.result, depth)
+        if node.left:
+            self.getDepth(node.left, depth + 1)
+        if node.right:
+            self.getDepth(node.right, depth + 1)
+
+    def minDepth(self, root):
+        if root is None:
+            return 0
+        self.getDepth(root, 1)
+        return self.result
