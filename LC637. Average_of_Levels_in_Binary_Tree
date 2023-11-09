@@ -1,0 +1,23 @@
+# LC637 Average of Levels in Binary Tree
+
+# Sol 1 BFS
+class Solution:
+    def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+        que = collections.deque([root])
+        res = []
+
+        while que:
+            n = len(que)
+            curr_sum = 0
+            counter = 0
+            for i in range(n):
+                curr = que.popleft()
+                curr_sum += curr.val
+                counter += 1
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+            
+            res.append(curr_sum/counter)
+        return res
