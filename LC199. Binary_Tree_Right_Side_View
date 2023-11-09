@@ -1,0 +1,43 @@
+# LC199 Binary_Tree_Right_Side_View
+
+# Sol 1 BFS
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        que = collections.deque([root])
+        res = []
+
+        while que:
+            n = len(que)
+            for i in range(n):
+                curr = que.popleft()
+                if i == n - 1:
+                    res.append(curr.val)
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+        return res
+
+# Sol 2 BFS
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        que = collections.deque([root])
+        res = []
+
+        while que:
+            n = len(que)
+            vec = []
+            for _ in range(n):
+                curr = que.popleft()
+                vec.append(curr.val)
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+            res.append(vec[-1])
+        return res
+                
