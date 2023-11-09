@@ -1,0 +1,44 @@
+# LC515 Find Largest Value in Each Tree Row
+
+# Sol 1
+class Solution:
+    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+        que = collections.deque()
+        res = []
+
+        if root:
+            que.append(root)
+        while que:
+            n = len(que)
+            cur_max = - float('inf')
+            for i in range(n):
+                node = que.popleft()
+                cur_max = max(cur_max,node.val)
+
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+            res.append(cur_max)
+        return res
+
+# Sol 2
+class Solution:
+    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        que = collections.deque([root])
+        res = []
+
+        while que:
+            n = len(que)
+            curr_max = -math.inf
+            for _ in range(n):
+                cur = que.popleft()
+                curr_max = max(curr_max,cur.val)
+                if cur.left:
+                    que.append(cur.left)
+                if cur.right:
+                    que.append(cur.right)
+            res.append(curr_max)
+        return res
