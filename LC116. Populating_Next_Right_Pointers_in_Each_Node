@@ -1,0 +1,27 @@
+# LC116 Populating Next Right Pointers in Each Node
+
+# Sol 
+class Solution:
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        if not root:
+            return root
+        que = collections.deque([root])
+
+
+        while que:
+            n = len(que)
+
+            for i in range(n):
+                if i == 0:
+                    pre = que.popleft()
+                    node = pre
+                else:
+                    node = que.popleft()
+                    pre.next = node
+                    pre = pre.next
+                if node.left:
+                    que.append(node.left)
+                if node.right:
+                    que.append(node.right)
+            pre.next = None
+        return root
