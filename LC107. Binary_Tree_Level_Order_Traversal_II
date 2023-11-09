@@ -1,0 +1,37 @@
+# LC107 Binary Tree Level Order Traversal II
+
+# Sol 1 BFS Iteration
+class Solution:
+    def levelOrderBottom(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        que = collections.deque([root])
+        res = []
+        while que:
+            level = []
+            for i in range(len(que)):
+                curr = que.popleft()
+                level.append(curr.val)
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+            res.append(level)
+        res = reversed(res)
+        return res
+
+# Sol 2 Recurision
+class Solution:
+    def levelOrderBottom(self, root: Optional[TreeNode]) -> List[List[int]]:
+        levels = []
+        self.bfs(root,0,levels)
+        return reversed(levels)
+
+    def bfs(self,node,level,levels):
+        if not node:
+            return
+        if len(levels) == level:
+            levels.append([])
+        levels[level].append(node.val)
+        self.bfs(node.left,level+1,levels)
+        self.bfs(node.right,level+1,levels)
