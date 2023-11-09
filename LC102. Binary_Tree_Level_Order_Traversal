@@ -1,0 +1,36 @@
+# LC102 Binary Tree Level Order Traversal
+
+# Sol 1 BFS FIFO
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        que = collections.deque([root])
+        res = []
+        while que:
+            level = []
+            for _ in range(len(que)):
+                curr = que.popleft()
+                level.append(curr.val)
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+            res.append(level)
+        return res
+
+# Sol 2 recursion
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        levels = []
+        self.helper(root, 0, levels)
+        return levels
+    
+    def helper(self, node, level, levels):
+        if not node:
+            return
+        if len(levels) == level:
+            levels.append([])
+        levels[level].append(node.val)
+        self.helper(node.left, level + 1, levels)
+        self.helper(node.right, level + 1, levels)
