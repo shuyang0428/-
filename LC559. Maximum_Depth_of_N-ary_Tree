@@ -1,0 +1,48 @@
+# LC559 Maximum Depth of N-ary Tree
+
+# Sol 1 DFS Recursion
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        depth = 0
+        for i in range(len(root.children)):
+            depth = max(depth,self.maxDepth(root.children[i]))
+        return depth + 1
+
+# Sol 2 BFS Iteration Stack
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        
+        max_depth = 0
+        
+        stack = [(root, 1)]
+        
+        while stack:
+            node, depth = stack.pop()
+            max_depth = max(max_depth, depth)
+            for child in node.children:
+                stack.append((child, depth + 1))
+        
+        return max_depth
+
+# Sol 3 BFS Iteration
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        que = collections.deque()
+        que.append(root)
+        res = 0
+        while que:
+            n = len(que)
+            res += 1
+            for i in range(n):
+                node = que.popleft()
+                for j in range(len(node.children)):
+                    if node.children[j]:
+                        que.append(node.children[j])
+
+        return res
