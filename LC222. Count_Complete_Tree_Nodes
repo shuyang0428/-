@@ -1,0 +1,63 @@
+# LC222 Count Complete Tree Nodes
+
+# Sol 1 BFS Iteration
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        que = collections.deque()
+        que.append(root)
+
+        res = 0
+        while que:
+            n = len(que)
+            for i in range(n):
+                cur = que.popleft()
+                res += 1
+                if cur.left:
+                    que.append(cur.left)
+                if cur.right:
+                    que.append(cur.right)
+        return res        
+
+# Sol 2 DFS Recursion
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        left = self.countNodes(root.left)
+        right = self.countNodes(root.right)
+        return left + right + 1
+
+# Sol 3 Complete Tree Recursion
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        left = root.left
+        right = root.right
+
+        ld = 0
+        rd = 0
+
+        while left:
+            left = left.left
+            ld += 1
+        while right:
+            right = right.right
+            rd += 1
+        if ld == rd:
+            return (2 << ld) - 1
+        return self.countNodes(root.left) + self.countNodes(root.right) + 1
+
+# Sol 4 Complete Binary Tree simplified
+class Solution: # 利用完全二叉树特性
+    def countNodes(self, root: TreeNode) -> int:
+        if not root: return 0
+        count = 1
+        left = root.left; right = root.right
+        while left and right:
+            count+=1
+            left = left.left; right = right.right
+        if not left and not right: # 如果同时到底说明是满二叉树，反之则不是
+            return 2**count-1
