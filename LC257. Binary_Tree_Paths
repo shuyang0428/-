@@ -1,0 +1,40 @@
+# LC257 Binary Tree Paths
+
+# Sol 1 Backtracking Recursion
+class Solution:
+    def traversal(self,cur,path,res):
+        path.append(cur.val)
+        if not cur.left and not cur.right:
+            sPath = "->".join(map(str,path))
+            res.append(sPath)
+        if cur.left:
+            self.traversal(cur.left,path,res)
+            path.pop()
+        if cur.right:
+            self.traversal(cur.right,path,res)
+            path.pop()
+    def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
+        res = []
+        path = []
+        if not root:
+            return []
+        self.traversal(root,path,res)
+        return res
+
+# Sol 2 Iteration
+class Solution:
+    def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
+        stack,path_st,res = [root],[str(root.val)],[]
+
+        while stack:
+            cur = stack.pop()
+            path = path_st.pop()
+            if not cur.left and not cur.right:
+                res.append(path)
+            if cur.right:
+                stack.append(cur.right)
+                path_st.append(path + "->" +str(cur.right.val))
+            if cur.left:
+                stack.append(cur.left)
+                path_st.append(path + "->" + str(cur.left.val))
+        return res
