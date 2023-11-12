@@ -1,0 +1,57 @@
+# LC110 Balanced Bianry Tree
+
+# Sol 1 DFS Postorder Recursion simplified
+class Solution:
+    def get_hight(self, node):
+        if not node:
+            return 0
+        left = self.get_hight(node.left)
+        right = self.get_hight(node.right)
+        if left == -1 or right == -1 or abs(left - right) > 1:
+            return -1
+        return max(left, right) + 1
+
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        return self.get_hight(root) != -1
+
+# Sol 2 DFS using Stack
+class Solution:
+    def getDepth(self, cur):
+        st = []
+        if cur is not None:
+            st.append(cur)
+        depth = 0
+        result = 0
+        while st:
+            node = st[-1]
+            if node is not None:
+                st.pop()
+                st.append(node)                           # 中
+                st.append(None)
+                depth += 1
+                if node.right:
+                    st.append(node.right)                 # 右
+                if node.left:
+                    st.append(node.left)                   # 左
+
+            else:               
+                node = st.pop()
+                st.pop()
+                depth -= 1
+            result = max(result, depth)
+        return result
+
+    def isBalanced(self, root):
+        st = []
+        if root is None:
+            return True
+        st.append(root)
+        while st:
+            node = st.pop()                                 # 中
+            if abs(self.getDepth(node.left) - self.getDepth(node.right)) > 1:
+                return False
+            if node.right:
+                st.append(node.right)                       # 右（空节点不入栈）
+            if node.left:
+                st.append(node.left)                         # 左（空节点不入栈）
+        return True
