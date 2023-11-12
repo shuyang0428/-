@@ -1,0 +1,30 @@
+# LC404 Sum of Left Leaves
+
+# Sol 1 Iteration preorder
+class Solution:
+    def sumOfLeftLeaves(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+        stack = [root]
+        res = 0
+        while stack:
+            node = stack.pop()
+            if node.left and node.left.left is None and node.left.right is None:
+                res += node.left.val
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return res
+
+# Sol 2 Recursion
+class Solution:
+    def sumOfLeftLeaves(self, root: Optional[TreeNode]) -> int:
+        if not root or (not root.left and not root.right):
+            return 0
+
+        res = 0
+        if root.left and not root.left.left and not root.left.right:
+            res = root.left.val
+        return res + self.sumOfLeftLeaves(root.left) + self.sumOfLeftLeaves(root.right)
+
