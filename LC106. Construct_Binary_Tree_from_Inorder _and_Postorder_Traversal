@@ -1,0 +1,22 @@
+# LC106 Construct Binary Tree from Inorder and Postorder Traversal
+
+# Sol 1
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+        if not postorder:
+            return None
+        rootval = postorder[-1]
+        root = TreeNode(rootval)
+
+        idx = inorder.index(root.val)
+
+        inorderLeft = inorder[:idx]
+        inorderRight = inorder[idx+1:]
+
+        postorderLeft = postorder[:len(inorderLeft)]
+        postorderRight = postorder[len(inorderLeft):len(postorder) - 1]
+
+        root.left = self.buildTree(inorderLeft,postorderLeft)
+        root.right = self.buildTree(inorderRight,postorderRight)
+
+        return root
