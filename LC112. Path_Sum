@@ -1,0 +1,53 @@
+# LC112 Path Sum
+
+# Sol 1 DFS Preorder
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> List[List[int]]:
+        if not root:
+            return []
+        stack = [(root, [root.val])]
+        res = []
+        while stack:
+            node, path = stack.pop()
+            if not node.left and not node.right and sum(path) == targetSum:
+                res.append(path)
+            if node.left:
+                stack.append((node.left, path + [node.left.val]))    
+            if node.right:
+                stack.append((node.right, path + [node.right.val]))
+            
+        return res
+
+# Sol 2 Recursion Backtracking
+class Solution:
+    def traversal(self,cur,count):
+        if not cur.left and not cur.right and not count: # Reach the leaf and count matches the target
+            return True
+        if not cur.left and not cur.right and count: # Reach the leaf and the sum doesn't match the target
+            return False
+
+        if cur.left:
+            count -= cur.left.val
+            if self.traversal(cur.left,count):
+                return True
+            count += cur.left.val
+        if cur.right:    
+            count -= cur.right.val
+            if self.traversal(cur.right,count):
+                return True
+            count += cur.right.val
+        return False
+
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        return self.traversal(root,targetSum - root.val)
+
+# Sol 3 Simplified Recursion Backtracking
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+        if not root:
+            return False
+        if not root.left and not root.right and targetSum == root.val:
+            return True
+        return self.hasPathSum(root.left,targetSum - root.val) or self.hasPathSum(root.right,targetSum - root.val)
