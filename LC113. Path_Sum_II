@@ -1,0 +1,70 @@
+# LC113 Path Sum II
+
+# Sol 1 DFS Preorder Stack
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        if not root:
+            return []
+        stack = [(root,[root.val])]
+        res = []
+        while stack:
+            node,path = stack.pop()
+            if not node.left and not node.right and sum(path) == targetSum:
+                res.append(path)
+            if node.right:
+                stack.append((node.right,path + [node.right.val]))
+            if node.left:
+                stack.append((node.left,path + [node.left.val]))
+        return res
+
+# Sol 2 Recursion DFS Backtracking
+class Solution:
+    def __init__(self):
+        self.res = []
+        self.path = []
+    def traversal(self,node,count):
+        if not node.left and not node.right and not count:
+            self.res.append(self.path[:])
+        if not node.left and not node.right:
+            return
+        if node.left:
+            count -= node.left.val
+            self.path.append(node.left.val)
+            self.traversal(node.left,count)
+            count += node.left.val
+            self.path.pop()
+        if node.right:
+            count -= node.right.val
+            self.path.append(node.right.val)
+            self.traversal(node.right,count)
+            count += node.right.val
+            self.path.pop()
+        return
+
+
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
+        self.res.clear()
+        self.path.clear()
+        if not root:
+            return []
+        self.path.append(root.val)
+        self.traversal(root,targetSum - root.val)
+        return self.res
+
+# Sol 3 Simplified Backtracking
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> List[List[int]]:
+        
+        result = []
+        self.traversal(root, targetSum, [], result)
+        return result
+    def traversal(self,node, count, path, result):
+            if not node:
+                return
+            path.append(node.val)
+            count -= node.val
+            if not node.left and not node.right and count == 0:
+                result.append(list(path))
+            self.traversal(node.left, count, path, result)
+            self.traversal(node.right, count, path, result)
+            path.pop()
