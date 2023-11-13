@@ -1,0 +1,40 @@
+# LC513 Find Bottom Left Tree Value
+
+# Sol 1 BFS Iteration
+class Solution:
+    def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
+        que = collections.deque([root])
+        res = 0
+
+        while que:
+            n = len(que)
+            for i in range(n):
+                curr = que.popleft()
+                if i == 0:
+                    res = curr.val
+                if curr.left:
+                    que.append(curr.left)
+                if curr.right:
+                    que.append(curr.right)
+        return res
+
+# Sol 2 Recursion Backtracking
+class Solution:
+    def traversal(self,node,depth):
+        if not node.left and not node.right: # Reach the leaf 
+            if depth > self.maxDepth:
+                self.maxDepth = depth
+                self.res = node.val
+            return
+        if node.left:
+            self.traversal(node.left,depth + 1)
+        if node.right:
+            self.traversal(node.right,depth + 1)
+            
+        
+    def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
+        self.maxDepth = float("-inf")
+        self.res = 0
+        self.traversal(root,0)
+        return self.res
+
