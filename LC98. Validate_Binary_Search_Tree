@@ -1,0 +1,115 @@
+# LC98 Validate Binary Search Tree
+
+# All the solution are Inorder traverse
+
+# Sol 1 Recursion set the min valur and compare
+class Solution:
+    def __init__(self):
+        self.maxVal = float('-inf')  # 因为后台测试数据中有int最小值
+
+    def isValidBST(self, root):
+        if root is None:
+            return True
+
+        left = self.isValidBST(root.left)
+        # 中序遍历，验证遍历的元素是不是从小到大
+        if self.maxVal < root.val:
+            self.maxVal = root.val
+        else:
+            return False
+        right = self.isValidBST(root.right)
+
+        return left and right
+
+# Sol 2 use the increasing property of inorder traverse to make it a list
+class Solution:
+    def __init__(self):
+        self.vec = []
+
+    def traversal(self, root):
+        if root is None:
+            return
+        self.traversal(root.left)
+        self.vec.append(root.val)  # 将二叉搜索树转换为有序数组
+        self.traversal(root.right)
+
+    def isValidBST(self, root):
+        self.vec = []  # 清空数组
+        self.traversal(root)
+        for i in range(1, len(self.vec)):
+            # 注意要小于等于，搜索树里不能有相同元素
+            if self.vec[i] <= self.vec[i - 1]:
+                return False
+        return True
+
+# Sol 3 get the min value to do the inorder traverse
+class Solution:
+    def __init__(self):
+        self.pre = None  # 用来记录前一个节点
+
+    def isValidBST(self, root):
+        if root is None:
+            return True
+
+        left = self.isValidBST(root.left)
+
+        if self.pre is not None and self.pre.val >= root.val:
+            return False
+        self.pre = root  # 记录前一个节点
+
+        right = self.isValidBST(root.right)
+        return left and right
+
+# Sol 4 Iteration
+class Solution:
+    def isValidBST(self, root):
+        stack = []
+        cur = root
+        pre = None  # 记录前一个节点
+        while cur is not None or len(stack) > 0:
+            if cur is not None:
+                stack.append(cur)
+                cur = cur.left  # 左
+            else:
+                cur = stack.pop()  # 中
+                if pre is not None and cur.val <= pre.val:
+                    return False
+                pre = cur  # 保存前一个访问的结点
+                cur = cur.right  # 右
+        return True
+
+# Sol 5 Recursive Traversal with Valid Range Time: O(N) Space:O(N)
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+
+        def validate(node, low=-math.inf, high=math.inf):
+            # Empty trees are valid BSTs.
+            if not node:
+                return True
+            # The current node's value must be between low and high.
+            if node.val <= low or node.val >= high:
+                return False
+
+            # The left and right subtree must also be valid.
+            return (validate(node.right, node.val, high) and
+                   validate(node.left, low, node.val))
+
+        return validate(root)
+
+# Sol 6 Iterative Traversal with Valid Range Time: O(N) Space:O(N)
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+
+        stack = [(root, -math.inf, math.inf)]
+        while stack:
+            root, lower, upper = stack.pop()
+            if not root:
+                continue
+            val = root.val
+            if val <= lower or val >= upper:
+                return False
+            stack.append((root.right, val, upper))
+            stack.append((root.left, lower, val))
+        return True
