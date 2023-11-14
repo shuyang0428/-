@@ -1,0 +1,36 @@
+# LC654 Maximum Binary Tree
+
+# Sol 1 Preorder Recursion
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums:
+            return None
+        
+        root = max(nums)
+        i = nums.index(root)
+
+        root = TreeNode(root)
+        left = nums[:i]
+        right = nums[i+1:]
+
+        root.left = self.constructMaximumBinaryTree(left)
+        root.right = self.constructMaximumBinaryTree(right)
+
+        return root
+
+# Sol 2 Backtracking
+class Solution:
+    def traversal(self, nums: List[int], left: int, right: int) -> TreeNode:
+        if left >= right:
+            return None
+        maxValueIndex = left
+        for i in range(left + 1, right):
+            if nums[i] > nums[maxValueIndex]:
+                maxValueIndex = i
+        root = TreeNode(nums[maxValueIndex])
+        root.left = self.traversal(nums, left, maxValueIndex)
+        root.right = self.traversal(nums, maxValueIndex + 1, right)
+        return root
+
+    def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
+        return self.traversal(nums, 0, len(nums))
