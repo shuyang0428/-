@@ -1,0 +1,63 @@
+# LC530 Minimum Absolute Difference in BST
+
+# Sol 1 Recursion
+class Solution:
+    def __init__(self) -> None:
+        self.res = float('inf')
+        self.pre = None
+    def traversal(self,cur):
+        if not cur:
+            return 
+        self.traversal(cur.left)
+        if self.pre:
+            self.res = min(self.res,cur.val - self.pre.val)
+        self.pre = cur
+        self.traversal(cur.right)
+
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        self.traversal(root)
+        return self.res
+
+# Iteration
+class Solution:
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        stack = []
+        cur = root
+        pre = None
+        result = float('inf')
+
+        while cur is not None or len(stack) > 0:
+            if cur is not None:
+                stack.append(cur)  # 将访问的节点放进栈
+                cur = cur.left  # 左
+            else:
+                cur = stack.pop()
+                if pre is not None:  # 中
+                    result = min(result, cur.val - pre.val)
+                pre = cur
+                cur = cur.right  # 右
+
+        return result
+
+# Sol 3 Recursion Inorder traverse by change it to an ordered list
+class Solution:
+    def __init__(self) -> None:
+        self.vec = []
+
+    def traversal(self,node):
+        if not node:
+            return None
+        self.traversal(node.left)
+        self.vec.append(node.val)
+        self.traversal(node.right)
+
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        self.vec = []
+        self.traversal(root) #change the tree to be the ordered list
+        if len(self.vec) < 2:
+            return 0
+        res = float('inf')
+        for i in range(1,len(self.vec)):
+            res = min(res,abs(self.vec[i] - self.vec[i-1]))
+        return res
+        
