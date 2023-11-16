@@ -1,0 +1,79 @@
+# LC701 Insert into a Binary Search Tree
+
+# Sol 1 Recursion use the parent node to point to the new node
+class Solution:
+    def __init__(self) -> None:
+        self.parent = None
+
+    def traversal(self, cur, val):
+        if cur is None:
+            node = TreeNode(val)
+            if val > self.parent.val:
+                self.parent.right = node
+            else:
+                self.parent.left = node
+            return
+
+        self.parent = cur
+        if cur.val > val:
+            self.traversal(cur.left,val)
+        if cur.val < val:
+            self.traversal(curr.right,val)
+        
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        self.parent = TreeNode(0)
+        if not root:
+            return TreeNode(val)
+        self.traversal(root,val)
+        return root
+
+# Sol 2 Iteration Pointer 
+class Solution:
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if not root:
+            return TreeNode(val)
+        
+        node = TreeNode(val)
+        pre = TreeNode(-1)
+        cur = root
+
+        while cur:
+            if cur.val > val:
+                pre,cur = cur,cur.left
+            elif cur.val < val:
+                pre,cur = cur,cur.right
+
+        if pre.val>val:
+            pre.left = node
+        else:
+            pre.right = node
+        return root
+
+# Sol 3 Simplifed Recursion
+class Solution:
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if not root:
+            return TreeNode(val)
+        
+        if root.val > val:
+            root.left = self.insertIntoBST(root.left,val)
+        if root.val < val:
+            root.right = self.insertIntoBST(root.right,val)
+        return root
+
+# Sol 4 Recursion 
+class Solution:
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if root is None or root.val == val:
+            return TreeNode(val)
+        elif root.val > val:
+            if root.left is None:
+                root.left = TreeNode(val)
+            else:
+                self.insertIntoBST(root.left, val)
+        elif root.val < val:
+            if root.right is None:
+                root.right = TreeNode(val)
+            else:
+                self.insertIntoBST(root.right, val)
+        return root
