@@ -1,0 +1,45 @@
+# LC235 Lowest Common Ancestor of a Binary Search Tree
+
+# Sol 1 Recursion Traverse helper function
+class Solution:
+    def traversal(self,curr,p,q):
+        # if not curr: #Since given in the title there exist a node which is the ancestor so there is no need to put the cur == None
+        #     return
+        if curr.val > p.val and curr.val > q.val: # we need to traverse the left tree
+            left = self.traversal(curr.left,p,q)
+            if left:
+                return left
+        if curr.val < p.val and curr.val < q.val: # we need to traverse the right tree
+            right = self.traversal(curr.right,p,q)
+            if right:
+                return right
+        return curr
+
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        return self.traversal(root,p,q)
+
+# Sol 2 simplified traverse
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        while (p.val < root.val and q.val < root.val ) or (p.val > root.val and q.val > root.val ):
+            if root.val < p.val:
+                root = root.right
+            elif root.val > p.val: 
+                root = root.left
+        return root  
+
+# Sol 3 
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root == q or root == p or not root:
+            return root
+        left = self.lowestCommonAncestor(root.left,p,q)
+        right = self.lowestCommonAncestor(root.right,p,q)
+        if left and right:
+            return root
+        if not left and right:
+            return right
+        elif left and not right:
+            return left
+        else:
+            return None
