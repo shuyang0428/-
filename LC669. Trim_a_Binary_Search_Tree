@@ -1,0 +1,46 @@
+# LC669 Trim a Binart Search Tree
+
+# Sol 1 Recursion 
+class Solution:
+    def trimBST(self, root: Optional[TreeNode], low: int, high: int) -> Optional[TreeNode]:
+        if not root:
+            return None
+        if root.val < low: #因为是BST root 右边的子树可能符合条件
+            return self.trimBST(root.right,low,high)
+        if root.val > high:
+            return self.trimBST(root.left,low,high) #同理 root左子树可能符合条件
+        # 如果root符合条件那么处理左右子树    
+        root.left = self.trimBST(root.left,low,high)
+        root.right = self.trimBST(root.right,low,high)
+        return root
+
+# Sol 2 Iteration
+class Solution:
+    def trimBST(self, root: TreeNode, L: int, R: int) -> TreeNode:
+        if not root:
+            return None
+        
+        # 处理头结点，让root移动到[L, R] 范围内，注意是左闭右闭
+        while root and (root.val < L or root.val > R):
+            if root.val < L:
+                root = root.right  # 小于L往右走
+            else:
+                root = root.left  # 大于R往左走
+        
+        cur = root
+        
+        # 此时root已经在[L, R] 范围内，处理左孩子元素小于L的情况
+        while cur:
+            while cur.left and cur.left.val < L:
+                cur.left = cur.left.right
+            cur = cur.left
+        
+        cur = root
+        
+        # 此时root已经在[L, R] 范围内，处理右孩子大于R的情况
+        while cur:
+            while cur.right and cur.right.val > R:
+                cur.right = cur.right.left
+            cur = cur.right
+        
+        return root
