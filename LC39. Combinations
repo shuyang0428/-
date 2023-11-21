@@ -1,0 +1,35 @@
+# LC 77 Combinations
+
+# Sol 1 Backtracking without pruning
+class Solution:
+    def backtracking(self, n, k, startIndex, path, res):
+        if len(path) == k:
+            res.append(path[:])
+            return
+        for i in range(startIndex, n + 1):
+            path.append(i)
+            self.backtracking(n,k,i+1,path,res)
+            path.pop()
+        
+
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        res = []
+        self.backtracking(n,k,1,[],res)
+        return res
+
+# Sol 2 Backtracking with pruning
+class Solution:
+    def backtracking(self, n, k, startIndex, path, res):
+        if len(path) == k:
+            res.append(path[:])
+            return
+        for i in range(startIndex, n + 2 - (k-len(path))): #Pruning 因为已经取了len(path)个元素，还需要取k-len(path)个元素，所以当 剩余元素 - 还需元素 < 0 就没有意义 如[1234]取3个 (k=3 n=2) 当从2取时(i=1 len(path)=0) 2 + 2 - (3-0) = 1 之后都没有意义了 
+            path.append(i)
+            self.backtracking(n,k,i+1,path,res)
+            path.pop()
+        
+
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        res = []
+        self.backtracking(n,k,1,[],res)
+        return res
