@@ -1,0 +1,41 @@
+# LC216 Combination Sum III
+
+# Sol 1 backtracking with purning
+class Solution:
+    def backtracking(self, k, n, startIndex, path, res):
+        if sum(path) > n:
+            return
+        if len(path) == k and sum(path) == n:
+            res.append(path[:])
+            return 
+        for i in range(startIndex,9 - (k - len(path))+2):
+            path.append(i)
+            self.backtracking(k,n,i+1,path,res)
+            path.pop()
+
+
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        res = []
+        self.backtracking(k,n,1,[],res)
+        return res
+
+# Sol 2 backtracking with counter and purning
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        path = []
+        res = []
+        self.backtracking(k,n,0,1,path,res)
+        return res
+    
+    def backtracking(self,k,target_sum,curr_sum,startid,path,res):
+        if curr_sum > target_sum:
+            return
+        if len(path) == k and curr_sum == target_sum:
+            res.append(path[:])
+            return
+        for i in range(startid,9 - (k - len(path)) + 2):
+            curr_sum += i
+            path.append(i)
+            self.backtracking(k,target_sum,curr_sum,i+1,path,res)
+            curr_sum -= i
+            path.pop()
