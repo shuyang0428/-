@@ -1,0 +1,60 @@
+# LC39 Combination Sum
+
+# Sol 1
+class Solution:
+    def backtracking(self,candidates,target,curr,startidx,path,res):
+        if curr == target:
+            res.append(path[:])
+            return
+        for i in range(startidx,len(candidates)):
+            if curr + candidates[i] > target:
+                break
+            curr += candidates[i]
+            path.append(candidates[i])
+            self.backtracking(candidates,target,curr,i,path,res)
+            curr -= candidates[i]
+            path.pop()
+
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        self.backtracking(candidates,target,0,0,[],res)
+        return res
+
+# Sol 2 simplified the backtracking part
+class Solution:
+    def backtracking(self,candidates,target,curr,startidx,path,res):
+        if curr == target:
+            res.append(path[:])
+            return
+        for i in range(startidx,len(candidates)):
+            if curr + candidates[i] > target:
+                break
+            path.append(candidates[i])
+            self.backtracking(candidates,target,curr + candidates[i],i,path,res)
+            path.pop()
+
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        self.backtracking(candidates,target,0,0,[],res)
+        return res
+
+# Sol 3 record the current value
+class Solution:
+    def backtracking(self,candidates,curr,startidx,path,res):
+        if curr == 0:
+            res.append(path[:])
+            return
+        for i in range(startidx,len(candidates)):
+            if curr - candidates[i] < 0 :
+                break
+            path.append(candidates[i])
+            self.backtracking(candidates,curr - candidates[i],i,path,res)
+            path.pop()
+
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        self.backtracking(candidates,target,0,[],res)
+        return res
