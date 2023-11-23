@@ -1,0 +1,43 @@
+# LC40 Combination Sum II
+
+# Sol 1 Remove the duplicate answare
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        results = []
+        self.combinationSumHelper(candidates, target, 0, [], results)
+        return results
+
+    def combinationSumHelper(self, candidates, target, index, path, results):
+        if target == 0:
+            results.append(path[:])
+            return
+        for i in range(index, len(candidates)):
+            if i > index and candidates[i] == candidates[i - 1]:
+                continue  
+            if candidates[i] > target:
+                break  
+            path.append(candidates[i])
+            self.combinationSumHelper(candidates, target - candidates[i], i + 1, path, results)
+            path.pop()
+
+# Sol 2 record the count
+class Solution:
+    def backtracking(self,candidates,target,count,startIndex,path,res):
+        if  count == target:
+            res.append(path[:])
+            return
+        for i in range(startIndex,len(candidates)):
+            if count + candidates[i] > target:
+                break
+            if i > startIndex and candidates[i] == candidates[i-1]:
+                continue
+            path.append(candidates[i])
+            self.backtracking(candidates,target,count + candidates[i],i+1,path,res)
+            path.pop()
+
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        self.backtracking(candidates,target,0,0,[],res)
+        return res
