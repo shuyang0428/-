@@ -1,0 +1,16 @@
+# LC78 Subsets
+
+# Sol
+class Solution:
+    def backtracking(self,nums,startIndex,path,res):
+        res.append(path[:])
+        if startIndex == len(nums):
+            return 
+        for i in range(startIndex,len(nums)):
+            path.append(nums[i])
+            self.backtracking(nums, i+1,path,res)
+            path.pop()
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        self.backtracking(nums,0,[],res)
+        return res
