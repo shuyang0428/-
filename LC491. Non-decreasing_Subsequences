@@ -1,0 +1,45 @@
+# LC491 Non-decerasing Subsequences
+
+# Sol 1 Remove duplicates by using set
+class Solution:
+    def backtracking(self,nums,startIndex,path,res):
+        if len(path) > 1: res.append(path[:])
+        if startIndex == len(nums):
+            return
+        
+        uset = set()
+        for i in range(startIndex,len(nums)):
+            if (path and nums[i] < path[-1]) or nums[i] in uset:
+                continue
+            uset.add(nums[i])
+            path.append(nums[i])
+            self.backtracking(nums,i+1,path,res)
+            path.pop()
+
+
+    def findSubsequences(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        self.backtracking(nums,0,[],res)
+        return res
+
+# Sol 2 Using list mark the used element
+class Solution:
+    def findSubsequences(self, nums):
+        result = []
+        path = []
+        self.backtracking(nums, 0, path, result)
+        return result
+
+    def backtracking(self, nums, startIndex, path, result):
+        if len(path) > 1:
+            result.append(path[:])  # 注意要使用切片将当前路径的副本加入结果集
+        
+        used = [0] * 201  # 使用数组来进行去重操作，题目说数值范围[-100, 100]
+        for i in range(startIndex, len(nums)):
+            if (path and nums[i] < path[-1]) or used[nums[i] + 100] == 1:
+                continue  # 如果当前元素小于上一个元素，或者已经使用过当前元素，则跳过当前元素
+            
+            used[nums[i] + 100] = 1  # 标记当前元素已经使用过
+            path.append(nums[i])  # 将当前元素加入当前递增子序列
+            self.backtracking(nums, i + 1, path, result)
+            path.pop()
