@@ -1,0 +1,81 @@
+# LC 51. N-Queens
+
+# Sol 1 Recursion
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        res = []
+        board = [["."for i in range(n)]for i in range(n)]
+        col = [True] * n
+        diag1 = [True]*(2*n-1)
+        diag2 = [True]*(2*n-1)
+
+        def updateBoard(x,y,n,flag):
+            col[x] = flag #flag the whole column
+            diag1[x+y] = flag #flag the diagonal
+            diag2[x-y+n-1] = flag #flag another diagional
+
+            board[y][x] = 'Q' if not flag else "."
+        
+        def available(x,y):
+            return col[x] and diag1[x+y] and diag2[x-y+n-1]
+        
+        def nqueens(y,n):
+            if y>=n:
+                temp = []
+                for i in range(n):
+                    temp.append("".join(board[i]))
+                res.append(temp)
+                return
+
+            for x in range(n):
+                if not available(x,y):
+                    continue
+                updateBoard(x,y,n,False)
+                nqueens(y+1,n)
+                updateBoard(x,y,n,True)
+        nqueens(0,n)
+        return res
+
+# Sol 2 Backtracking
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        result = []  # 存储最终结果的二维字符串数组
+
+        chessboard = ['.' * n for _ in range(n)]  # 初始化棋盘
+        self.backtracking(n, 0, chessboard, result)  # 回溯求解
+        return [[''.join(row) for row in solution] for solution in result]  # 返回结果集
+
+    def backtracking(self, n: int, row: int, chessboard: List[str], result: List[List[str]]) -> None:
+        if row == n:
+            result.append(chessboard[:])  # 棋盘填满，将当前解加入结果集
+            return
+
+        for col in range(n):
+            if self.isValid(row, col, chessboard):
+                chessboard[row] = chessboard[row][:col] + 'Q' + chessboard[row][col+1:]  # 放置皇后
+                self.backtracking(n, row + 1, chessboard, result)  # 递归到下一行
+                chessboard[row] = chessboard[row][:col] + '.' + chessboard[row][col+1:]  # 回溯，撤销当前位置的皇后
+
+    def isValid(self, row: int, col: int, chessboard: List[str]) -> bool:
+        # 检查列
+        for i in range(row):
+            if chessboard[i][col] == 'Q':
+                return False  # 当前列已经存在皇后，不合法
+
+        # 检查 45 度角是否有皇后
+        i, j = row - 1, col - 1
+        while i >= 0 and j >= 0:
+            if chessboard[i][j] == 'Q':
+                return False  # 左上方向已经存在皇后，不合法
+            i -= 1
+            j -= 1
+
+        # 检查 135 度角是否有皇后
+        i, j = row - 1, col + 1
+        while i >= 0 and j < len(chessboard):
+            if chessboard[i][j] == 'Q':
+                return False  # 右上方向已经存在皇后，不合法
+            i -= 1
+            j += 1
+
+        return True  # 当前位置合法
