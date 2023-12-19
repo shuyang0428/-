@@ -1,0 +1,56 @@
+LC45 Jump Game II
+
+# Sol 1 Greedy
+class Solution:
+    def jump(self, nums) -> int:
+        if len(nums)==1:  # 如果数组只有一个元素，不需要跳跃，步数为0
+            return 0
+        
+        i = 0  # 当前位置
+        count = 0  # 步数计数器
+        cover = 0  # 当前能够覆盖的最远距离
+        
+        while i <= cover:  # 当前位置小于等于当前能够覆盖的最远距离时循环
+            for i in range(i, cover+1):  # 遍历从当前位置到当前能够覆盖的最远距离之间的所有位置
+                cover = max(nums[i]+i, cover)  # 更新当前能够覆盖的最远距离
+                if cover >= len(nums)-1:  # 如果当前能够覆盖的最远距离达到或超过数组的最后一个位置，直接返回步数+1
+                    return count+1
+            count += 1  # 每一轮遍历结束后，步数+1
+
+# Sol 2 
+class Solution:
+    def jump(self, nums):
+        if len(nums) == 1:
+            return 0
+        
+        cur_distance = 0  # 当前覆盖最远距离下标
+        ans = 0  # 记录走的最大步数
+        next_distance = 0  # 下一步覆盖最远距离下标
+        
+        for i in range(len(nums) - 1):
+            next_distance = max(nums[i] + i, next_distance)  # 更新下一步覆盖最远距离下标
+            if i == cur_distance:  # 遇到当前覆盖最远距离下标
+                ans += 1  # 需要走下一步
+                cur_distance = next_distance  # 更新当前覆盖最远距离下标（相当于加油了）
+
+        return ans
+
+# Sol 3 Greedy
+class Solution:
+class Solution:
+    def jump(self, nums: List[int]) -> int:
+        if len(nums) <= 1:
+            return 0
+        
+        curr_distance,next_distance,res = 0,0,0
+
+        for i in range(len(nums)-1):
+            next_distance = max(next_distance,nums[i] + i)
+            if next_distance >= len(nums) - 1:
+                res += 1
+                break 
+            if i == curr_distance:
+                res += 1
+                curr_distance = next_distance
+        return res
+            
