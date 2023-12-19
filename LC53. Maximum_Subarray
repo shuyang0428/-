@@ -1,0 +1,32 @@
+# LC53 Maximum Subarry
+
+# Sol 1 Greedy
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = float('-inf')
+        curr_sum = 0
+        for i in range(len(nums)):
+            curr_sum += nums[i]
+            if curr_sum > res:
+                res = curr_sum
+            if curr_sum <= 0:
+                curr_sum = 0
+
+        return res
+
+# sol 2 Sliding Window
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        left,right = 0,0
+
+        res = float('-inf')
+        curr_sum = 0
+
+        while right<len(nums):
+            curr_sum += nums[right]
+            right += 1
+            res = max(res,curr_sum)
+            while left < right and curr_sum <= 0:
+                curr_sum -= nums[left]
+                left += 1
+        return res
