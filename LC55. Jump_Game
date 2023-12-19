@@ -1,0 +1,35 @@
+# LC55 Jump Game
+
+# Sol 1 Greedy using while
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        max_cover = 0
+
+        if len(nums) <= 1:
+            return True
+        
+        i = 0
+        while i <= max_cover:
+            max_cover = max(max_cover,i + nums[i])
+            if max_cover >= len(nums) - 1:
+                return True
+            i += 1
+        return False
+
+# Sol 2 Greedy using for loop
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        max_cover = 0
+
+        if len(nums) <= 1:
+            return True
+        
+        for i in range(len(nums)):
+            if max_cover >= len(nums):
+                return True
+
+            if i > max_cover:
+                return False
+            else:
+                max_cover = max(max_cover,i + nums[i])
+        return True
