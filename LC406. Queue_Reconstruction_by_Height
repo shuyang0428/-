@@ -1,0 +1,13 @@
+# LC406 Queue Reconstruction by Height
+
+# Sol Greedy
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        people.sort(key = lambda x:(-x[0],x[1]))
+        # print(people)
+
+        que = []
+        for person in people:
+            que.insert(person[1],person)
+            # print(que)
+        return que
