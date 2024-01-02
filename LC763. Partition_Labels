@@ -1,0 +1,60 @@
+# LC763 Partition Lablels
+
+# Sol 1 Greedy using sliding window
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        res = []
+        hash = {}
+        for i in range(len(s)):
+                hash[s[i]] = i
+        
+        left,right = 0,0
+        for i in range(len(s)):
+            right = max(right,int(hash[s[i]]))
+            if i == right:
+                res.append(right - left + 1)
+                left = i + 1
+        return res
+
+# Sol 2 Greedy Simplified version of Sol 1
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        ans = []
+        start = end = 0
+        for i in range(len(s)):
+            end = max(end,s.rfind(s[i]))
+            if i == end:
+                ans.append(end-start+1)
+                start = end + 1
+        
+        return ans
+
+
+# Sol 3 Greedy by building a hash filter
+class Solution:
+    def countLabels(self, s):
+        # 初始化一个长度为26的区间列表，初始值为负无穷
+        hash = [[float('-inf'), float('-inf')] for _ in range(26)]
+        hash_filter = []
+        for i in range(len(s)):
+            if hash[ord(s[i]) - ord('a')][0] == float('-inf'):
+                hash[ord(s[i]) - ord('a')][0] = i
+            hash[ord(s[i]) - ord('a')][1] = i
+        for i in range(len(hash)):
+            if hash[i][0] != float('-inf'):
+                hash_filter.append(hash[i])
+        return hash_filter
+
+    def partitionLabels(self, s):
+        res = []
+        hash = self.countLabels(s)
+        hash.sort(key=lambda x: x[0])  # 按左边界从小到大排序
+        rightBoard = hash[0][1]  # 记录最大右边界
+        leftBoard = 0
+        for i in range(1, len(hash)):
+            if hash[i][0] > rightBoard:  # 出现分割点
+                res.append(rightBoard - leftBoard + 1)
+                leftBoard = hash[i][0]
+            rightBoard = max(rightBoard, hash[i][1])
+        res.append(rightBoard - leftBoard + 1)  # 最右端
+        return res
