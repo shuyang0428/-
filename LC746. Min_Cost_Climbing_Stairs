@@ -1,0 +1,33 @@
+# LC746 Min Cost Climbing Stairs
+
+# Sol 1 DP Time:O(N) Space:O(N)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        dp = [0] * (len(cost)+1)
+        dp[0],dp[1] = 0,0
+
+        for i in range(2,len(cost)+1):
+            dp[i] = min(dp[i-1]+cost[i-1],dp[i-2]+cost[i-2])
+        return dp[len(cost)]
+
+# Sol 2 DP Time:O(N) Space:O(1)
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        dp = [0,0]
+
+        for i in range(2,len(cost)+1):
+            dpi = min(dp[1]+cost[i-1],dp[0]+cost[i-2])
+            dp[0] = dp[1]
+            dp[1] = dpi
+        return dp[1]
+
+# Sol 3 
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        prev_1 = cost[0]  # 前一步的最小花费
+        prev_2 = cost[1]  # 前两步的最小花费
+        for i in range(2, n):
+            current = min(prev_1, prev_2) + cost[i]  # 当前位置的最小花费
+            prev_1, prev_2 = prev_2, current  # 更新前一步和前两步的最小花费
+        return min(prev_1, prev_2)  # 最后一步可以理解为不用花费，取倒数第一步和第二步的最少值
