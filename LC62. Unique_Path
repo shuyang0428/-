@@ -1,0 +1,44 @@
+# LC 62 Unique Path
+
+# Sol 1 DP
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [[0] * n for _ in range(m)]
+        
+        for i in range(n):
+            dp[0][i] = 1
+        for j in range(m):
+            dp[j][0] = 1
+        
+        for i in range(1,m):
+            for j in range(1,n):
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+                
+        return dp[m-1][n-1]
+
+# Sol 2 DP harder version and simplified verson of dp
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [1]*n
+
+        for j in range(1,m):
+            for i in range(1,n):
+                dp[i] += dp[i-1]
+        return dp[n-1]
+
+# Sol 3 Recursion but will exceed the time limit
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        if m == 1 or n == 1:
+            return 1
+        return self.uniquePaths(m - 1, n) + self.uniquePaths(m, n - 1)
+
+# Sol 4 Math 
+from math import factorial
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # C(m+n-2) (n-1)
+        bottom = factorial(n-1) * factorial(m-1)
+        top = factorial(m+n-2)
+
+        return top // bottom
